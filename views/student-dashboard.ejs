@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>학생 대시보드</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/student-dashboard.css">
+  <link rel="stylesheet" href="/loading.css">
+  <style>
+    /* 로딩 화면 스타일 */
+    #loadingScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 9999;
+      place-items: center; /* 수평과 수직 중앙 정렬을 동시에 설정 */
+    }
+
+    #loadingScreen img {
+      max-width: 150px; /* 이미지 크기를 더 크게 설정 */
+    }
+    #loadinginside {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 실제 콘텐츠 숨김 처리 */
+    #content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="loadingScreen">
+    <div id="loadinginside">
+      <img src="/image/dawon.png" alt="로딩 이미지">
+      <br>
+      <br>
+      <div class="cssload-spin-box"></div>
+    </div>
+  </div>
+  
+  <div id="content">
+    <div class="container">
+      <h1>학생 대시보드</h1>
+      
+      <!-- 학생 메시지 제출 -->
+      <h2>메시지 제출</h2>
+      <form action="/submit" method="POST">
+          <label for="title">제목:</label>
+          <input type="text" id="title" name="title" required placeholder="제목을 입력하세요">
+          
+          <label for="week">주차:</label>
+          <select id="week" name="week" required>
+            <option value="1주차">1주차</option>
+            <option value="2주차">2주차</option>
+            <option value="3주차">3주차</option>
+            <option value="4주차">4주차</option>
+          </select>
+          
+          <label for="message">메시지:</label>
+          <textarea id="message" name="message" required placeholder="메시지를 입력하세요"></textarea>
+          <p id="charCount" style="color: green;">0 / 300 자 (최소 200자)</p>
+        
+          <button type="submit" id="submitBtn" disabled>제출하기</button>
+      </form>
+      
+      <!-- 제출된 메시지 목록 -->
+      <h2>제출된 메시지</h2>
+      <% messages.forEach(function(message) { %>
+          <div class="message">
+            <h3><%= message.title %> - <%= message.week %></h3>
+            <p>내용: <%= message.message %></p>
+            <p>선생님: <%= message.teacher %></p>
+            <p><strong>선생님 첨삭:</strong> <%= message.comment ? message.comment : '첨삭이 없습니다.' %></p>
+            <small><%= new Date(message.date).toLocaleString() %></small>
+          </div>
+        <% }) %>
+    </div>
+  </div>
+
+  <script>
+    // 페이지 로드 후 3초 기다린 뒤 로딩 화면 숨기기
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      }, 1500); // 3초 후 실행
+    };
+
+    const textarea = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    const submitBtn = document.getElementById('submitBtn');
+
+    textarea.addEventListener('input', function () {
+        // 자동 높이 조정
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        
+        // 글자 수 카운팅
+        const currentLength = this.value.length;
+        charCount.textContent = `${currentLength} / 300 자 (최소 200자)`;
+
+        if (currentLength < 200 || currentLength > 300) {
+            charCount.style.color = 'red';
+            submitBtn.disabled = true;
+        } else {
+            charCount.style.color = 'green';
+            submitBtn.disabled = false;
+        }
+    });
+  </script>
+</body>
+</html>

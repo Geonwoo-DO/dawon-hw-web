@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선생님 대시보드</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+      body {
+        font-family: 'Nanum Gothic';
+        background-color: #f4f7f6;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        align-items: flex-start;
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 700px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .messages {
+        margin-top: 20px;
+      }
+
+      .message {
+        background-color: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+
+      .message h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .message p {
+        font-size: 16px;
+        color: #555;
+      }
+
+      button {
+        background-color: #5c6bc0;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #3f51b5;
+      }
+
+      form {
+        margin-top: 20px;
+      }
+
+      .students {
+        margin-top: 30px;
+      }
+
+      .student {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      .student p {
+        font-size: 16px;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>학생들의 제출 메시지</h1>
+    
+    <div class="messages">
+      <% messages.forEach(function(message) { %>
+        <div class="message" onclick="window.location.href='/teacher/v/<%= message.uid %>';">
+          <h3>[<%= message.week %>] <%= message.title %></h3>
+          <p>이름: <%= message.name %></p>
+          <small><%= message.timeAgo %></small>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="students">
+      <h2>학생 목록</h2>
+      <% students.forEach(function(student) { %>
+        <div class="student">
+          <p>학생 이름: <%= student.name %></p>
+          <p>선생님: <%= student.teacher %></p>
+        </div>
+      <% }) %>
+    </div>
+
+    <!-- 로그아웃 버튼 -->
+    <form action="/logout" method="GET">
+      <button type="submit">로그아웃</button>
+    </form>
+
+    <!-- 학생 추가 -->
+    <form action="/add-student" method="GET">
+      <button type="submit">학생 추가</button>
+    </form>
+
+    <!-- 다른 선생님 추가 -->
+    <form action="/register" method="GET">
+        <button type="submit">다른 선생님 추가</button>
+    </form>
+  </div>
+</body>
+</html>

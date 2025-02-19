@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* 기본적인 리셋 및 바디 스타일 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Nanum Gothic";
+    }
+
+    body {
+      font-family: 'Nanum Gothic';
+      font-weight: 600;
+      background-color: #f4f7f6;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #333;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      transition: transform 0.3s ease-in-out;
+    }
+    input[type="text"],
+    input[type="password"] {
+      padding: 15px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #4a90e2;
+      background-color: #f1faff;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      padding: 15px;
+      background-color: #5C6BC0;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #357ab7;
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(2px);
+    }
+
+    button[type="submit"]:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    button[type="submit"] {
+      transition: all 0.3s ease;
+    }
+
+    .container:focus-within {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 10px #7f8ac9;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>로그인</h1> 
+    <form action="/login" method="POST">
+      <label for="username">아이디:</label>
+      <input type="text" id="username" name="username" required placeholder="아이디를 입력하세요">
+      
+      <label for="password">비밀번호:</label>
+      <input type="password" id="password" name="password" required placeholder="비밀번호를 입력하세요">
+
+      <button type="submit">로그인</button>
+    </form>
+  </div>
+</body>
+</html>

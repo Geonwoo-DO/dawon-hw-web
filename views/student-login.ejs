@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title>학생 로그인</title>
+  <style>
+      body {
+        font-family: 'Nanum Gothic';
+        font-weight: 600;
+        background-color: #f4f7f6;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      input[type="text"],
+      input[type="password"] {
+        padding: 15px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border-color: #4a90e2;
+        background-color: #f1faff;
+        outline: none;
+      }
+      button[type="submit"] {
+        padding: 15px;
+        background-color: #5C6BC0;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+      .container:focus-within {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 10px #7f8ac9;
+      }
+      label {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+        text-align: left;
+        margin-bottom: 5px;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>학생 로그인</h1>
+    <form action="/student-login" method="POST">
+      <label for="studentName">학생 이름:</label>
+      <br>
+      <input type="text" id="studentName" name="studentName" required placeholder="학생 이름을 입력하세요">
+      
+      <label for="teacherName">선생님 이름:</label>
+      <br>
+      <input type="text" id="teacherName" name="teacherName" required placeholder="선생님 이름을 입력하세요">
+      
+      <button type="submit">로그인</button>
+    </form>
+  </div>
+</body>
+</html>

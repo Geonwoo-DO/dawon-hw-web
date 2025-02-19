@@ -1,0 +1,26 @@
+{
+  "name": "teacher-student-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.1",
+    "blakejs": "^1.2.1",
+    "body-parser": "^1.20.3",
+    "crypto": "^1.0.1",
+    "csurf": "^1.10.0",
+    "date-fns": "^4.1.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.1",
+    "uuidv4": "^6.2.13"
+  }
+}

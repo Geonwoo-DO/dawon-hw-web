@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>새 선생님 추가</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+      body {
+      font-family: 'Nanum Gothic';
+      font-weight: 600;
+      background-color: #f4f7f6;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>새 선생님 추가</h1>
+    <form action="/register" method="POST">
+      <label for="username">아이디:</label>
+      <input type="text" id="username" name="username" required placeholder="아이디를 입력하세요">
+      
+      <label for="password">비밀번호:</label>
+      <input type="password" id="password" name="password" required placeholder="비밀번호를 입력하세요">
+      
+      <button type="submit">선생님 추가하기</button>
+    </form>
+  </div>
+</body>
+</html>

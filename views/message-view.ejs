@@ -1,0 +1,31 @@
+<!-- teacher-message-view.ejs -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메시지 보기</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/messageview.css">
+</head>
+<body>
+  <div class="container">
+    <h1>메시지 상세보기</h1>
+    
+    <p><strong>제목:</strong> <%= message.title %></p>
+    <p><strong>학생 이름:</strong> <%= message.name %></p>
+    <p><strong>주차:</strong> <%= message.week %></p>
+    <p><strong>메시지 내용:</strong></p>
+    <p><%= message.message %></p>
+
+    <!-- 첨삭 추가 폼 -->
+    <form action="/teacher/v/<%= message.uid %>" method="POST">
+      <label for="comment">첨삭:</label>
+      <textarea id="comment" name="comment" rows="4" cols="50" placeholder="첨삭을 입력하세요"><%= message.comment || '' %></textarea>
+      <button type="submit">첨삭 저장</button>
+    </form>
+
+    <a href="/teacher-dashboard">뒤로 가기</a>
+  </div>
+</body>
+</html>
