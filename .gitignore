@@ -3,3 +3,6 @@ node_modules/
 certs/node_modules/
 .tmp.driveupload/
 certs/
+node_modules/
+.tmp.driveupload/
+certs/
