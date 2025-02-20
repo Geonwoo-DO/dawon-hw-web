@@ -6,19 +6,37 @@ const session = require('express-session');
 const blake2b = require('blakejs').blake2b;
 const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
-const { formatDistanceToNow, parseISO } = require('date-fns'); // date-fns 라이브러리 사용
+const { formatDistanceToNow } = require('date-fns');
 const { ko } = require('date-fns/locale');
+const csurf = require('csurf');
+const { body, validationResult } = require('express-validator');
+const cookieParser = require('cookie-parser');
+const compression = require('compression')
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser()); // 세션과 함께 쿠키 파싱
 app.set('view engine', 'ejs');
 
 app.use(session({
   secret: 'geonwoo!',
   resave: false,
-  saveUninitialized: true,
-  cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 24 * 60 * 60 * 1000 }
+  saveUninitialized: false,
+  cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production' ? true : false, maxAge: 24 * 60 * 60 * 1000 }
+}));
+
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
+
+app.use(compression({
+  threshold: 1024, 
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false; 
+    }
+    return compression.filter(req, res); 
+  }
 }));
 
 const usersFilePath = path.join(__dirname, 'users.json');
@@ -61,6 +79,11 @@ function comparePassword(storedPassword, storedSalt, inputPassword, callback) {
     callback(null, blake2Hash.toString('hex') === storedPassword);
   });
 }
+
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 // 임시로 register을 할 수 있는 엔드포인트. 개발 변수가 켜져있을 때만 작동함.
 app.get('/devregister', (req, res) => {
@@ -434,6 +457,7 @@ app.post('/student-login', (req, res) => {
   });
 });
 
+// HTTP/2 서버 실행
 app.listen(80, () => {
-  console.log('Server started on gumaon.com (localhost)');
+  console.log('Server started on localhost using HTTP/1');
 });

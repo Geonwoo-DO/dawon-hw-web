@@ -20,6 +20,7 @@
 
     <!-- 첨삭 추가 폼 -->
     <form action="/teacher/v/<%= message.uid %>" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label for="comment">첨삭:</label>
       <textarea id="comment" name="comment" rows="4" cols="50" placeholder="첨삭을 입력하세요"><%= message.comment || '' %></textarea>
       <button type="submit">첨삭 저장</button>

@@ -63,6 +63,7 @@
   <div class="container">
     <h1>학생 로그인</h1>
     <form action="/student-login" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label for="studentName">학생 이름:</label>
       <br>
       <input type="text" id="studentName" name="studentName" required placeholder="학생 이름을 입력하세요">

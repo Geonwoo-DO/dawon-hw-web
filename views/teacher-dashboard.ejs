@@ -115,17 +115,20 @@
 
     <!-- 로그아웃 버튼 -->
     <form action="/logout" method="GET">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button type="submit">로그아웃</button>
     </form>
 
     <!-- 학생 추가 -->
     <form action="/add-student" method="GET">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button type="submit">학생 추가</button>
     </form>
 
     <!-- 다른 선생님 추가 -->
     <form action="/register" method="GET">
-        <button type="submit">다른 선생님 추가</button>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button type="submit">다른 선생님 추가</button>
     </form>
   </div>
 </body>

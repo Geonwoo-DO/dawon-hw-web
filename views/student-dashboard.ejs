@@ -57,6 +57,7 @@
       <!-- 학생 메시지 제출 -->
       <h2>메시지 제출</h2>
       <form action="/submit" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <label for="title">제목:</label>
           <input type="text" id="title" name="title" required placeholder="제목을 입력하세요">
           

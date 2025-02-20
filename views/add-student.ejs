@@ -71,6 +71,7 @@
     <h1>학생 추가</h1>
     
     <form action="/add-student" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label for="studentName">학생 이름</label>
       <input type="text" id="studentName" name="studentName" required placeholder="학생 이름을 입력하세요">
 

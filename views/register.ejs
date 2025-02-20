@@ -24,6 +24,7 @@
   <div class="container">
     <h1>새 선생님 추가</h1>
     <form action="/register" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label for="username">아이디:</label>
       <input type="text" id="username" name="username" required placeholder="아이디를 입력하세요">
       
