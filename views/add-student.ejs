@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>학생 추가</title>
+  <title>학생 관리</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/nanumgothic.css">
   <style>
       body {
-        font-family: 'Nanum Gothic';
+        font-family: 'Nanum Gothic', sans-serif;
         background-color: #f4f7f6;
         color: #333;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         height: 100vh;
         margin: 0;
         padding: 0;
-        align-items: flex-start;
       }
 
       .container {
@@ -25,10 +25,10 @@
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 500px;
+        max-width: 800px;
       }
 
-      h1 {
+      h1, h2 {
         text-align: center;
         margin-bottom: 20px;
       }
@@ -36,6 +36,15 @@
       form {
         display: flex;
         flex-direction: column;
+        margin-bottom: 30px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      form.show {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       label {
@@ -54,32 +63,180 @@
       button {
         background-color: #5c6bc0;
         color: white;
-        padding: 15px;
+        padding: 12px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
+        transition: background-color 0.3s ease;
       }
 
       button:hover {
         background-color: #3f51b5;
       }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #5c6bc0;
+        color: white;
+      }
+
+      td {
+        background-color: #f9f9f9;
+      }
+
+      .delete-btn {
+        background-color: #e57373;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .delete-btn:hover {
+        background-color: #f44336;
+      }
+
+      a {
+        display: inline-block;
+        margin-top: 20px;
+        text-align: center;
+        color: #5c6bc0;
+        text-decoration: none;
+        font-size: 16px;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      #add-student-btn {
+        background-color: #81c784;
+        width: 100%;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        display: inline-block;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+      }
+
+      #add-student-btn:hover {
+        background-color: #66bb6a;
+      }
+
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>학생 추가</h1>
-    
-    <form action="/add-student" method="POST">
+    <!-- 학생 관리 테이블 -->
+    <h1>학생 목록</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>학생 이름</th>
+          <th>가입일</th>
+          <th>액션</th>
+        </tr>
+      </thead>
+      <tbody id="student-list">
+        <!-- 여기에 학생 목록이 동적으로 추가됩니다 -->
+      </tbody>
+    </table>
+
+    <div id="add-student-btn">+ 학생 추가</div>
+
+    <!-- 학생 추가 폼 -->
+    <form id="student-form" action="/add-student" method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <label for="studentName">학생 이름</label>
       <input type="text" id="studentName" name="studentName" required placeholder="학생 이름을 입력하세요">
-
       <button type="submit">학생 추가</button>
     </form>
 
-    <br>
     <a href="/teacher-dashboard">돌아가기</a>
   </div>
+
+  <script src="/js/managestudent.js"></script>
+
+  <script>
+    // 학생 목록을 테이블에 표시
+    async function fetchStudents() {
+        const response = await fetch("/students");
+        const students = await response.json();
+
+        const tableBody = document.getElementById("student-list");
+        tableBody.innerHTML = ""; // 기존 목록 초기화
+
+        students.forEach(student => {
+            const row = document.createElement("tr");
+
+            // 학생 이름 셀
+            const nameCell = document.createElement("td");
+            nameCell.textContent = student.studentName;
+            row.appendChild(nameCell);
+
+            // 가입일 셀
+            const dateCell = document.createElement("td");
+            dateCell.textContent = new Date(student.date).toLocaleDateString();
+            row.appendChild(dateCell);
+
+            // 액션 셀 (삭제 버튼)
+            const actionsCell = document.createElement("td");
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "삭제";
+            deleteBtn.onclick = () => deleteStudent(student.studentName);
+            deleteBtn.classList.add("delete-btn");
+            actionsCell.appendChild(deleteBtn);
+            row.appendChild(actionsCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    // 학생 삭제 처리
+    async function deleteStudent(name) {
+        if (!confirm("학생을 삭제하시겠습니까?")) return; // 확인창
+
+        const response = await fetch(`/students/${name}`, { method: "DELETE" });
+        const result = await response.json();
+
+        if (result.success) {
+            fetchStudents(); // 삭제 후 목록 새로고침
+        } else {
+            alert("삭제 실패: " + result.error);
+        }
+    }
+
+    // 학생 추가 폼 보이기
+    const addStudentBtn = document.getElementById("add-student-btn");
+    const studentForm = document.getElementById("student-form");
+
+    addStudentBtn.addEventListener("click", () => {
+        studentForm.classList.toggle("show");
+        // 버튼 텍스트를 바꿔서 숨기기 기능 추가
+        if (studentForm.classList.contains("show")) {
+            addStudentBtn.textContent = "- 폼 닫기";
+        } else {
+            addStudentBtn.textContent = "+ 학생 추가";
+        }
+    });
+
+    // 페이지 로드 시 학생 목록 불러오기
+    fetchStudents();
+  </script>
 </body>
 </html>

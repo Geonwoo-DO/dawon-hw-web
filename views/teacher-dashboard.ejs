@@ -103,16 +103,6 @@
       <% }) %>
     </div>
 
-    <div class="students">
-      <h2>학생 목록</h2>
-      <% students.forEach(function(student) { %>
-        <div class="student">
-          <p>학생 이름: <%= student.name %></p>
-          <p>선생님: <%= student.teacher %></p>
-        </div>
-      <% }) %>
-    </div>
-
     <!-- 로그아웃 버튼 -->
     <form action="/logout" method="GET">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -122,7 +112,7 @@
     <!-- 학생 추가 -->
     <form action="/add-student" method="GET">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-      <button type="submit">학생 추가</button>
+      <button type="submit">학생 관리</button>
     </form>
 
     <!-- 다른 선생님 추가 -->

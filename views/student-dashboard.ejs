@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/student-dashboard.css">
   <link rel="stylesheet" href="/loading.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     /* 로딩 화면 스타일 */
     #loadingScreen {
@@ -18,7 +19,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(201, 189, 211, 0.8);
       z-index: 9999;
       place-items: center; /* 수평과 수직 중앙 정렬을 동시에 설정 */
     }
@@ -43,7 +44,7 @@
 <body>
   <div id="loadingScreen">
     <div id="loadinginside">
-      <img src="/image/dawon.png" alt="로딩 이미지">
+      <img src="/image/logo.webp" alt="로딩 이미지">
       <br>
       <br>
       <div class="cssload-spin-box"></div>
@@ -56,7 +57,7 @@
       
       <!-- 학생 메시지 제출 -->
       <h2>메시지 제출</h2>
-      <form action="/submit" method="POST">
+      <form action="/submit" method="POST" id="student-form">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <label for="title">제목:</label>
           <input type="text" id="title" name="title" required placeholder="제목을 입력하세요">
@@ -72,8 +73,8 @@
           <label for="message">메시지:</label>
           <textarea id="message" name="message" required placeholder="메시지를 입력하세요"></textarea>
           <p id="charCount" style="color: green;">0 / 300 자 (최소 200자)</p>
-        
-          <button type="submit" id="submitBtn" disabled>제출하기</button>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAA9xRw85s9YM29pJ"></div>
+          <button type="submit" id="submitBtn" class="g-recaptcha" >제출하기</button>
       </form>
       
       <!-- 제출된 메시지 목록 -->
@@ -89,7 +90,7 @@
         <% }) %>
     </div>
   </div>
-
+  <script src="https://www.google.com/recaptcha/api.js"></script>
   <script>
     // 페이지 로드 후 3초 기다린 뒤 로딩 화면 숨기기
     window.onload = function() {
@@ -104,21 +105,29 @@
     const submitBtn = document.getElementById('submitBtn');
 
     textarea.addEventListener('input', function () {
-        // 자동 높이 조정
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-        
-        // 글자 수 카운팅
-        const currentLength = this.value.length;
-        charCount.textContent = `${currentLength} / 300 자 (최소 200자)`;
+      // 자동 높이 조정
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+      
+      // 공백과 특수문자를 제외한 글자 수 카운팅 (모든 문자 허용)
+      const currentLength = this.value.replace(/[^\p{L}\p{N}]/gu, '').length; // 문자와 숫자만 허용 (유니코드 문자, 숫자)
+      charCount.textContent = `${currentLength} / 300 자 (최소 200자)`;
 
-        if (currentLength < 200 || currentLength > 300) {
-            charCount.style.color = 'red';
-            submitBtn.disabled = true;
-        } else {
-            charCount.style.color = 'green';
-            submitBtn.disabled = false;
-        }
+      if (currentLength < 200 || currentLength > 300) {
+          charCount.style.color = 'red';
+          submitBtn.disabled = true;
+      } else {
+          charCount.style.color = 'green';
+          submitBtn.disabled = false;
+      }
+    });
+    
+    document.getElementById("student-form").addEventListener("submit", function(event) {
+      const response = grecaptcha.getResponse();
+      if (response.length === 0) {
+          event.preventDefault(); // Turnstile 응답이 없으면 제출하지 않음
+          alert("Turnstile 검증을 완료해주세요.");
+      }
     });
   </script>
 </body>
